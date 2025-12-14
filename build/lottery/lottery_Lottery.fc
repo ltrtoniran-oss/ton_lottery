@@ -1,0 +1,754 @@
+#pragma version =0.4.6;
+#pragma allow-post-modification;
+#pragma compute-asm-ltr;
+
+;; lottery_Lottery.headers.fc
+;;
+;; Header files for Lottery
+;; NOTE: declarations are sorted for optimal order
+;;
+
+;; __tact_store_address_opt
+builder __tact_store_address_opt(builder b, slice address) inline;
+
+;; __tact_not_null
+forall X -> X __tact_not_null(X x) impure inline;
+
+;; __tact_context_get
+(int, slice, int, slice) __tact_context_get() inline;
+
+;; __tact_context_get_sender
+slice __tact_context_get_sender() inline;
+
+;; __tact_prepare_random
+() __tact_prepare_random() impure inline;
+
+;; __tact_dict_get_slice_int
+int __tact_dict_get_slice_int(cell d, int kl, slice k, int vl) inline;
+
+;; __tact_dict_set_slice_int
+(cell, ()) __tact_dict_set_slice_int(cell d, int kl, slice k, int v, int vl) inline;
+
+;; __tact_dict_get_int_slice
+slice __tact_dict_get_int_slice(cell d, int kl, int k) inline;
+
+;; __tact_dict_set_int_slice
+(cell, ()) __tact_dict_set_int_slice(cell d, int kl, int k, slice v) inline;
+
+;; $DeployOk$_store
+builder $DeployOk$_store(builder build_0, (int) v) inline;
+
+;; $DeployOk$_store_cell
+cell $DeployOk$_store_cell((int) v, builder b) inline;
+
+;; $Lottery$_store
+builder $Lottery$_store(builder build_0, (slice, int, int, int, int, cell, cell, int, slice, slice, slice) v) inline;
+
+;; $Lottery$_load
+(slice, ((slice, int, int, int, int, cell, cell, int, slice, slice, slice))) $Lottery$_load(slice sc_0) inline;
+
+;; $Context$_get_value
+_ $Context$_get_value((int, slice, int, slice) v) inline;
+
+;; $LastWinners$_to_external
+(slice, slice, slice) $LastWinners$_to_external(((slice, slice, slice)) v) inline;
+
+;; $Lottery$init$_load
+(slice, ((slice))) $Lottery$init$_load(slice sc_0) inline;
+
+;; $Lottery$_contract_init
+(slice, int, int, int, int, cell, cell, int, slice, slice, slice) $Lottery$_contract_init(slice $owner) impure inline;
+
+;; $Lottery$_contract_load
+(slice, int, int, int, int, cell, cell, int, slice, slice, slice) $Lottery$_contract_load() impure inline;
+
+;; $Lottery$_contract_store
+() $Lottery$_contract_store((slice, int, int, int, int, cell, cell, int, slice, slice, slice) v) impure inline;
+
+;; $global_random
+int $global_random(int $min, int $max) impure inline;
+
+;; $SendParameters$_constructor_to_value_mode_body
+((int, cell, cell, cell, int, slice, int)) $SendParameters$_constructor_to_value_mode_body(slice $to, int $value, int $mode, cell $body) inline;
+
+;; $Lottery$_fun_reset
+((slice, int, int, int, int, cell, cell, int, slice, slice, slice), ()) $Lottery$_fun_reset((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref;
+
+;; $Lottery$_fun_executeDraw
+((slice, int, int, int, int, cell, cell, int, slice, slice, slice), ()) $Lottery$_fun_executeDraw((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref;
+
+;; $Lottery$_fun_balance
+((slice, int, int, int, int, cell, cell, int, slice, slice, slice), int) $Lottery$_fun_balance((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref;
+
+;; $Lottery$_fun_params
+((slice, int, int, int, int, cell, cell, int, slice, slice, slice), int) $Lottery$_fun_params((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref;
+
+;; $Lottery$_fun_userTickets
+((slice, int, int, int, int, cell, cell, int, slice, slice, slice), int) $Lottery$_fun_userTickets((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self, slice $user) impure inline_ref;
+
+;; $LastWinners$_constructor_winner1_winner2_winner3
+((slice, slice, slice)) $LastWinners$_constructor_winner1_winner2_winner3(slice $winner1, slice $winner2, slice $winner3) inline;
+
+;; $Lottery$_fun_lastWinners
+((slice, int, int, int, int, cell, cell, int, slice, slice, slice), (slice, slice, slice)) $Lottery$_fun_lastWinners((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref;
+
+;; $MessageParameters$_constructor_bounce_to_value_mode_body
+((int, cell, int, slice, int)) $MessageParameters$_constructor_bounce_to_value_mode_body(int $bounce, slice $to, int $value, int $mode, cell $body) inline;
+
+;; $Lottery$_fun_notify
+((slice, int, int, int, int, cell, cell, int, slice, slice, slice), ()) $Lottery$_fun_notify((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self, cell $body) impure inline;
+
+;; $DeployOk$_constructor_queryId
+((int)) $DeployOk$_constructor_queryId(int $queryId) inline;
+
+
+;; lottery_Lottery.stdlib.fc
+global (int, slice, int, slice) __tact_context;
+global slice __tact_context_sender;
+global cell __tact_child_contract_codes;
+global int __tact_randomized;
+
+(slice, slice) __tact_load_address_opt(slice cs) asm """
+
+            b{00} SDBEGINSQ
+            IF:<{
+              PUSHNULL
+            }>ELSE<{
+              LDMSGADDR
+              SWAP
+            }>
+
+""";
+
+builder __tact_store_addr_none(builder b) asm "b{00} STSLICECONST";
+
+builder __tact_store_address_opt(builder b, slice address) inline {
+    if (null?(address)) {
+        return __tact_store_addr_none(b);
+    } else {
+        return b.store_slice(address);
+    }
+}
+
+forall X -> X __tact_not_null(X x) impure inline {
+    throw_if(128, null?(x)); return x;
+}
+
+(cell, int) __tact_dict_delete(cell dict, int key_len, slice index) asm(index dict key_len) """
+    DICTDEL
+""";
+
+(slice, int) __tact_dict_get(cell dict, int key_len, slice index) asm(index dict key_len) """
+    DICTGET NULLSWAPIFNOT
+""";
+
+(int, slice, int, slice) __tact_context_get() inline {
+    return __tact_context;
+}
+
+slice __tact_context_get_sender() inline {
+    return __tact_context_sender;
+}
+
+() __tact_prepare_random() impure inline {
+    if (null?(__tact_randomized)) {
+        randomize_lt();
+        __tact_randomized = true;
+    }
+}
+
+int __tact_dict_get_slice_int(cell d, int kl, slice k, int vl) inline {
+    var (r, ok) = __tact_dict_get(d, kl, k);
+    if (ok) {
+        return r~load_int(vl);
+    } else {
+        return null();
+    }
+}
+
+(cell, ()) __tact_dict_set_slice_int(cell d, int kl, slice k, int v, int vl) inline {
+    if (null?(v)) {
+        var (r, ok) = __tact_dict_delete(d, kl, k);
+        return (r, ());
+    } else {
+        return (dict_set_builder(d, kl, k, begin_cell().store_int(v, vl)), ());
+    }
+}
+
+slice __tact_dict_get_int_slice(cell d, int kl, int k) inline {
+    var (r, ok) = idict_get?(d, kl, k);
+    if (ok) {
+        return r;
+    } else {
+        return null();
+    }
+}
+
+(cell, ()) __tact_dict_set_int_slice(cell d, int kl, int k, slice v) inline {
+    if (null?(v)) {
+        var (r, ok) = idict_delete?(d, kl, k);
+        return (r, ());
+    } else {
+        return (idict_set(d, kl, k, v), ());
+    }
+}
+
+int $global_now() impure asm """
+    NOW
+""";
+
+int $global_nativeRandomInterval(int $max) impure asm """
+    RAND
+""";
+
+int $global_random(int $min, int $max) impure inline {
+    __tact_prepare_random();
+    return ($min + $global_nativeRandomInterval(($max - $min)));
+}
+
+int $global_myBalance() impure asm """
+    BALANCE FIRST
+""";
+
+() $global_nativeReserve(int $amount, int $mode) impure asm """
+    RAWRESERVE
+""";
+
+() $global_message((int, cell, int, slice, int) $params) impure asm """
+    NEWC
+    b{01} STSLICECONST  // store tag = $0 and ihr_disabled = true
+    1 STI               // store `bounce`
+    b{000} STSLICECONST // store bounced = false and src = addr_none
+    STSLICE             // store `to`
+    SWAP
+    STGRAMS             // store `value`
+    106 PUSHINT         // 1 + 4 + 4 + 64 + 32 + 1
+    STZEROES
+    // → Stack state
+    // s0: Builder
+    // s1: `body`
+    // s2: `mode`
+    STDICT
+    ENDC
+    SWAP
+    SENDRAWMSG
+""";
+
+() $global_send((int, cell, cell, cell, int, slice, int) $params) impure asm """
+    NEWC
+    b{01} STSLICECONST  // store tag = $0 and ihr_disabled = true
+    1 STI               // store `bounce`
+    b{000} STSLICECONST // store bounced = false and src = addr_none
+    STSLICE             // store `to`
+    SWAP
+    STGRAMS             // store `value`
+    105 PUSHINT         // 1 + 4 + 4 + 64 + 32
+    STZEROES            // store currency_collection, ihr_fee, fwd_fee, created_lt and created_at
+    // → Stack state
+    // s0: Builder
+    // s1: `data`
+    // s2: `code`
+    // s3: `body`
+    // s4: `mode`
+
+    // Group 2: Placing the Builder after code and data, then checking those for nullability
+    s2 XCHG0
+    DUP2
+    ISNULL
+    SWAP
+    ISNULL
+    AND
+    // → Stack state
+    // s0: -1 (true) if `data` and `code` are both null, 0 (false) otherwise
+    // s1: `code`
+    // s2: `data`
+    // s3: Builder
+    // s4: `body`
+    // s5: `mode`
+
+    // Group 3: Left branch of the IFELSE, executed if s0 is -1 (true)
+    <{
+        DROP2 // drop `data` and `code`, since either of those is null
+        b{0} STSLICECONST
+    }> PUSHCONT
+
+    // Group 3: Right branch of the IFELSE, executed if s0 is 0 (false)
+    <{
+        // _ split_depth:(Maybe (## 5))
+        //   special:(Maybe TickTock)
+        //   code:(Maybe ^Cell)
+        //   data:(Maybe ^Cell)
+        //   library:(Maybe ^Cell)
+        // = StateInit;
+        ROT                // place message Builder on top
+        b{10} STSLICECONST // store Maybe = true, Either = false
+        // Start composing inlined StateInit
+        b{00} STSLICECONST // store split_depth and special first
+        STDICT             // store code
+        STDICT             // store data
+        b{0} STSLICECONST  // store library
+    }> PUSHCONT
+
+    // Group 3: IFELSE that does the branching shown above
+    IFELSE
+    // → Stack state
+    // s0: Builder
+    // s1: null or StateInit
+    // s2: `body`
+    // s3: `mode`
+
+    // Group 4: Finalizing the message
+    STDICT // store `body` as ref with an extra Maybe bit, since `body` might be null
+    ENDC
+    // → Stack state
+    // s0: Cell
+    // s1: `mode`
+
+    // Group 5: Sending the message, with `mode` on top
+    SWAP
+    SENDRAWMSG // https://github.com/tact-lang/tact/issues/1558
+""";
+
+((slice, int, int, int, int, cell, cell, int, slice, slice, slice), ()) $Lottery$_fun_notify((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self, cell $body) impure inline {
+    var (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)) = $self;
+    slice $to = __tact_context_get_sender();
+    int $bounce = false;
+    if (false) {
+        int $balance = $global_myBalance();
+        int $balanceBeforeMessage = ($balance - $Context$_get_value(__tact_context_get()));
+        if (($balanceBeforeMessage < 0)) {
+            $global_nativeReserve(0, 0);
+            $global_message($MessageParameters$_constructor_bounce_to_value_mode_body($bounce, $to, 0, 130, $body));
+            return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), ());
+        }
+    }
+    $global_message($MessageParameters$_constructor_bounce_to_value_mode_body($bounce, $to, 0, 66, $body));
+    return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), ());
+}
+
+;; lottery_Lottery.constants.fc
+;; Cell Fbc1zJF0iDy/+qYd6EKZTDLIJ7XfwpB+UK6KUF6xF0Q=
+cell __gen_cell_cell_15b735cc9174883cbffaa61de842994c32c827b5dfc2907e50ae8a505eb11744() asm """
+    B{b5ee9c7241010101001900002e00000000466972737420506c6163652057696e6e657221f726ff20} B>boc PUSHREF
+""";
+
+;; Cell yS+UDQRqAS3J+emjiETlmc4K32/9ww7cO44Eg+h+daI=
+cell __gen_cell_cell_c92f940d046a012dc9f9e9a38844e599ce0adf6ffdc30edc3b8e0483e87e75a2() asm """
+    B{b5ee9c7241010101001a000030000000005365636f6e6420506c6163652057696e6e657221f0cf4084} B>boc PUSHREF
+""";
+
+;; Cell 9lZKHAeYUMyD2gh6ptqGwaEtTcvfL6prrJSRJCPRHwI=
+cell __gen_cell_cell_f6564a1c079850cc83da087aa6da86c1a12d4dcbdf2faa6bac94912423d11f02() asm """
+    B{b5ee9c7241010101001900002e00000000546869726420506c6163652057696e6e657221fec1a684} B>boc PUSHREF
+""";
+
+;; Cell qqvJZYVdv16qN7ahKvCCKuhVyXcur4UbZ1eDl4PasLc=
+cell __gen_cell_cell_aaabc965855dbf5eaa37b6a12af0822ae855c9772eaf851b6757839783dab0b7() asm """
+    B{b5ee9c7241010101001000001c00000000466565205061796f75741045c99e} B>boc PUSHREF
+""";
+
+;; lottery_Lottery.storage.fc
+;;
+;; Type: Context
+;; TLB: _ bounceable:bool sender:address value:int257 raw:^slice = Context
+;;
+
+_ $Context$_get_value((int, slice, int, slice) v) inline {
+    var (v'bounceable, v'sender, v'value, v'raw) = v;
+    return v'value;
+}
+
+;;
+;; Type: SendParameters
+;; TLB: _ mode:int257 body:Maybe ^cell code:Maybe ^cell data:Maybe ^cell value:int257 to:address bounce:bool = SendParameters
+;;
+
+((int, cell, cell, cell, int, slice, int)) $SendParameters$_constructor_to_value_mode_body(slice $to, int $value, int $mode, cell $body) inline {
+    return ($mode, $body, null(), null(), $value, $to, true);
+}
+
+;;
+;; Type: MessageParameters
+;; TLB: _ mode:int257 body:Maybe ^cell value:int257 to:address bounce:bool = MessageParameters
+;;
+
+((int, cell, int, slice, int)) $MessageParameters$_constructor_bounce_to_value_mode_body(int $bounce, slice $to, int $value, int $mode, cell $body) inline {
+    return ($mode, $body, $value, $to, $bounce);
+}
+
+;;
+;; Type: DeployOk
+;; Header: 0xaff90f57
+;; TLB: deploy_ok#aff90f57 queryId:uint64 = DeployOk
+;;
+
+builder $DeployOk$_store(builder build_0, (int) v) inline {
+    var (v'queryId) = v;
+    build_0 = store_uint(build_0, 2952335191, 32);
+    build_0 = build_0.store_uint(v'queryId, 64);
+    return build_0;
+}
+
+cell $DeployOk$_store_cell((int) v, builder b) inline {
+    return $DeployOk$_store(b, v).end_cell();
+}
+
+((int)) $DeployOk$_constructor_queryId(int $queryId) inline {
+    return ($queryId);
+}
+
+;;
+;; Type: LastWinners
+;; TLB: _ winner1:address winner2:address winner3:address = LastWinners
+;;
+
+(slice, slice, slice) $LastWinners$_to_external(((slice, slice, slice)) v) inline {
+    var (v'winner1, v'winner2, v'winner3) = v; 
+    return (v'winner1, v'winner2, v'winner3);
+}
+
+((slice, slice, slice)) $LastWinners$_constructor_winner1_winner2_winner3(slice $winner1, slice $winner2, slice $winner3) inline {
+    return ($winner1, $winner2, $winner3);
+}
+
+;;
+;; Type: Lottery
+;; TLB: _ owner:address ticketPrice:coins startTime:uint32 endTime:uint32 interval:uint32 consumers:dict<int, address> ticketCounts:dict<address, int> counter:uint32 lastWinner1:address lastWinner2:address lastWinner3:address = Lottery
+;;
+
+builder $Lottery$_store(builder build_0, (slice, int, int, int, int, cell, cell, int, slice, slice, slice) v) inline {
+    var (v'owner, v'ticketPrice, v'startTime, v'endTime, v'interval, v'consumers, v'ticketCounts, v'counter, v'lastWinner1, v'lastWinner2, v'lastWinner3) = v;
+    build_0 = build_0.store_slice(v'owner);
+    build_0 = build_0.store_varuint16(v'ticketPrice);
+    build_0 = build_0.store_uint(v'startTime, 32);
+    build_0 = build_0.store_uint(v'endTime, 32);
+    build_0 = build_0.store_uint(v'interval, 32);
+    build_0 = build_0.store_dict(v'consumers);
+    var build_1 = begin_cell();
+    build_1 = build_1.store_dict(v'ticketCounts);
+    build_1 = build_1.store_uint(v'counter, 32);
+    build_1 = __tact_store_address_opt(build_1, v'lastWinner1);
+    build_1 = __tact_store_address_opt(build_1, v'lastWinner2);
+    build_1 = __tact_store_address_opt(build_1, v'lastWinner3);
+    build_0 = store_builder_ref(build_0, build_1);
+    return build_0;
+}
+
+(slice, ((slice, int, int, int, int, cell, cell, int, slice, slice, slice))) $Lottery$_load(slice sc_0) inline {
+    var v'owner = sc_0~load_msg_addr();
+    var v'ticketPrice = sc_0~load_varuint16();
+    var v'startTime = sc_0~load_uint(32);
+    var v'endTime = sc_0~load_uint(32);
+    var v'interval = sc_0~load_uint(32);
+    var v'consumers = sc_0~load_dict();
+    slice sc_1 = sc_0~load_ref().begin_parse();
+    var v'ticketCounts = sc_1~load_dict();
+    var v'counter = sc_1~load_uint(32);
+    var v'lastWinner1 = sc_1~__tact_load_address_opt();
+    var v'lastWinner2 = sc_1~__tact_load_address_opt();
+    var v'lastWinner3 = sc_1~__tact_load_address_opt();
+    return (sc_0, (v'owner, v'ticketPrice, v'startTime, v'endTime, v'interval, v'consumers, v'ticketCounts, v'counter, v'lastWinner1, v'lastWinner2, v'lastWinner3));
+}
+
+(slice, ((slice))) $Lottery$init$_load(slice sc_0) inline {
+    var v'owner = sc_0~load_msg_addr();
+    return (sc_0, (v'owner));
+}
+
+(slice, int, int, int, int, cell, cell, int, slice, slice, slice) $Lottery$_contract_load() impure inline {
+    slice $sc = get_data().begin_parse();
+    int $loaded = $sc~load_int(1);
+    if ($loaded) {
+        return $sc~$Lottery$_load();
+    }
+    else {
+        (slice $owner) = $sc~$Lottery$init$_load();
+        $sc.end_parse();
+        return $Lottery$_contract_init($owner);
+    }
+}
+
+() $Lottery$_contract_store((slice, int, int, int, int, cell, cell, int, slice, slice, slice) v) impure inline {
+    builder b = begin_cell();
+    b = b.store_int(true, 1);
+    b = $Lottery$_store(b, v);
+    set_data(b.end_cell());
+}
+
+;;
+;; Contract Lottery functions
+;;
+
+(slice, int, int, int, int, cell, cell, int, slice, slice, slice) $Lottery$_contract_init(slice $owner) impure inline {
+    var (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)) = (null(), null(), null(), null(), null(), null(), null(), null(), null(), null(), null());
+    $self'owner = $owner;
+    $self'ticketPrice = 1000000000;
+    $self'startTime = $global_now();
+    $self'interval = 604800;
+    $self'endTime = ($self'startTime + $self'interval);
+    $self'counter = 0;
+    return ($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3);
+}
+
+((slice, int, int, int, int, cell, cell, int, slice, slice, slice), ()) $Lottery$_fun_reset((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref {
+    var (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)) = $self;
+    $self'startTime = $global_now();
+    $self'endTime = ($self'startTime + $self'interval);
+    $self'counter = 0;
+    $self'consumers = null();
+    $self'ticketCounts = null();
+    int $balance = ($global_myBalance() - 50000000);
+    if (($balance > 10000000000)) {
+        $global_send($SendParameters$_constructor_to_value_mode_body($self'owner, $balance, 2, __gen_cell_cell_aaabc965855dbf5eaa37b6a12af0822ae855c9772eaf851b6757839783dab0b7()));
+    }
+    return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), ());
+}
+
+((slice, int, int, int, int, cell, cell, int, slice, slice, slice), ()) $Lottery$_fun_executeDraw((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref {
+    var (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)) = $self;
+    ifnot ($self'counter) {
+        ($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)~$Lottery$_fun_reset();
+        return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), ());
+    }
+    int $seed1 = $global_random(0, $self'counter);
+    slice $winner1 = __tact_not_null(__tact_dict_get_int_slice($self'consumers, 257, $seed1));
+    $self'lastWinner1 = $winner1;
+    int $seed2 = $global_random(0, $self'counter);
+    slice $winner2 = __tact_not_null(__tact_dict_get_int_slice($self'consumers, 257, $seed2));
+    int $attempts = 0;
+    while (( (( (( equal_slices_bits($winner2, $winner1) )) ? (($attempts < 5)) : (false) )) ? (($self'counter > 1)) : (false) )) {
+        $seed2 = $global_random(0, $self'counter);
+        $winner2 = __tact_not_null(__tact_dict_get_int_slice($self'consumers, 257, $seed2));
+        $attempts = ($attempts + 1);
+    }
+    $self'lastWinner2 = $winner2;
+    int $seed3 = $global_random(0, $self'counter);
+    slice $winner3 = __tact_not_null(__tact_dict_get_int_slice($self'consumers, 257, $seed3));
+    $attempts = 0;
+    while (( (( (( (( equal_slices_bits($winner3, $winner1) )) ? (true) : (( equal_slices_bits($winner3, $winner2) )) )) ? (($attempts < 5)) : (false) )) ? (($self'counter > 2)) : (false) )) {
+        $seed3 = $global_random(0, $self'counter);
+        $winner3 = __tact_not_null(__tact_dict_get_int_slice($self'consumers, 257, $seed3));
+        $attempts = ($attempts + 1);
+    }
+    $self'lastWinner3 = $winner3;
+    int $balance = $global_myBalance();
+    int $storageReserve = 50000000;
+    int $pot = ($balance - $storageReserve);
+    if (($pot > 0)) {
+        int $prize1 = (($pot * 50) / 100);
+        int $prize2 = (($pot * 25) / 100);
+        int $prize3 = (($pot * 15) / 100);
+        $global_send($SendParameters$_constructor_to_value_mode_body($winner1, $prize1, 2, __gen_cell_cell_15b735cc9174883cbffaa61de842994c32c827b5dfc2907e50ae8a505eb11744()));
+        $global_send($SendParameters$_constructor_to_value_mode_body($winner2, $prize2, 2, __gen_cell_cell_c92f940d046a012dc9f9e9a38844e599ce0adf6ffdc30edc3b8e0483e87e75a2()));
+        $global_send($SendParameters$_constructor_to_value_mode_body($winner3, $prize3, 2, __gen_cell_cell_f6564a1c079850cc83da087aa6da86c1a12d4dcbdf2faa6bac94912423d11f02()));
+    }
+    ($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)~$Lottery$_fun_reset();
+    return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), ());
+}
+
+((slice, int, int, int, int, cell, cell, int, slice, slice, slice), int) $Lottery$_fun_balance((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref {
+    var (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)) = $self;
+    var $fresh$ret_0 = $global_myBalance();
+    return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), $fresh$ret_0);
+}
+
+((slice, int, int, int, int, cell, cell, int, slice, slice, slice), int) $Lottery$_fun_params((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref {
+    var (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)) = $self;
+    var $fresh$ret_1 = $self'endTime;
+    return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), $fresh$ret_1);
+}
+
+((slice, int, int, int, int, cell, cell, int, slice, slice, slice), int) $Lottery$_fun_userTickets((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self, slice $user) impure inline_ref {
+    var (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)) = $self;
+    int $count = __tact_dict_get_slice_int($self'ticketCounts, 267, $user, 257);
+    if (null?($count)) {
+        var $fresh$ret_2 = 0;
+        return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), $fresh$ret_2);
+    }
+    var $fresh$ret_3 = __tact_not_null($count);
+    return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), $fresh$ret_3);
+}
+
+((slice, int, int, int, int, cell, cell, int, slice, slice, slice), (slice, slice, slice)) $Lottery$_fun_lastWinners((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref {
+    var (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)) = $self;
+    var $fresh$ret_4 = $LastWinners$_constructor_winner1_winner2_winner3($self'lastWinner1, $self'lastWinner2, $self'lastWinner3);
+    return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), $fresh$ret_4);
+}
+
+;;
+;; Get methods of a Contract Lottery
+;;
+
+_ %balance() method_id(104128) {
+    var self = $Lottery$_contract_load();
+    var res = self~$Lottery$_fun_balance();
+    return res;
+}
+
+_ %params() method_id(116437) {
+    var self = $Lottery$_contract_load();
+    var res = self~$Lottery$_fun_params();
+    return res;
+}
+
+_ %userTickets(slice $user) method_id(104971) {
+    slice $user = $user;
+    var self = $Lottery$_contract_load();
+    var res = self~$Lottery$_fun_userTickets($user);
+    return res;
+}
+
+_ %lastWinners() method_id(104779) {
+    var self = $Lottery$_contract_load();
+    var res = self~$Lottery$_fun_lastWinners();
+    return $LastWinners$_to_external(res);
+}
+
+;;
+;; Routing of a Contract Lottery
+;;
+
+;; message opcode reader utility: only binary receivers
+;; Returns 32 bit message opcode, otherwise throws the "Invalid incoming message" exit code
+(slice, int) ~load_opcode_internal(slice s) asm( -> 1 0) "32 LDUQ 130 THROWIFNOT";
+
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
+    
+    ;; Context
+    var cs = in_msg_cell.begin_parse();
+    cs~skip_bits(2);
+    var msg_bounceable = cs~load_int(1);
+    var msg_bounced = cs~load_int(1);
+    slice msg_sender_addr = cs~load_msg_addr();
+    __tact_context = (msg_bounceable, msg_sender_addr, msg_value, cs);
+    __tact_context_sender = msg_sender_addr;
+    
+    ;; Load contract data
+    var ($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3) = $Lottery$_contract_load();
+    
+    ;; Handle bounced messages
+    if (msg_bounced) { return (); }
+    int op = 0;
+    int in_msg_length = slice_bits(in_msg);
+    if (in_msg_length >= 32) {
+        op = in_msg~load_uint(32);
+        ;; Receive Deploy message
+        if (op == 0x946a98b6) {
+            var $deploy'queryId = in_msg~load_uint(64);
+            ($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)~$Lottery$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId), begin_cell()));
+            $Lottery$_contract_store(($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3));
+            return ();
+        }
+        
+    }
+    ;; Empty Receiver and Text Receivers
+    var text_op = slice_hash(in_msg);
+    ;; Receive "buy" message
+    if (text_op == 0x91a3be4c93a85bd2e6be4eb82f98c33c12384ddd3ea141580587f8d8e38b1e0d) {
+        var ($ctx'bounceable, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+        throw_unless(15304, ($ctx'value >= $self'ticketPrice));
+        throw_unless(19287, ($global_now() < $self'endTime));
+        $self'consumers~__tact_dict_set_int_slice(257, $self'counter, $ctx'sender);
+        $self'counter = ($self'counter + 1);
+        int $currentCount = 0;
+        int $savedCount = __tact_dict_get_slice_int($self'ticketCounts, 267, $ctx'sender, 257);
+        if ((~ null?($savedCount))) {
+            $currentCount = __tact_not_null($savedCount);
+        }
+        $self'ticketCounts~__tact_dict_set_slice_int(267, $ctx'sender, ($currentCount + 1), 257);
+        $Lottery$_contract_store(($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3));
+        return ();
+    }
+    ;; Receive "draw" message
+    if (text_op == 0xb06e2f6ff1a217a458de5285280d11f15c0e47d065a96713ffb52bce4d197514) {
+        throw_unless(36845, ($global_now() >= $self'endTime));
+        ($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)~$Lottery$_fun_executeDraw();
+        $Lottery$_contract_store(($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3));
+        return ();
+    }
+    ;; Throw if not handled
+    throw(130);
+}
+
+
+() __tact_selector_hack_asm() impure asm """
+@atend @ 1 {
+        execute current@ context@ current!
+        {
+            // The core idea of this function is to save gas by avoiding unnecessary dict jump, when recv_internal/recv_external is called
+            // We want to extract recv_internal/recv_external from the dict and select needed function
+            // not by jumping to the needed function by it's index, but by using usual IF statements.
+
+            }END> b> // Close previous builder, now we have a cell of previous code on top of the stack
+
+            <{ // Start of the new code builder
+                SETCP0
+                // Swap the new code builder with the previous code, now we have previous code on top of the stack
+                swap
+                // Transform cell to slice and load first ref from the previous code, now we have the dict on top of the stack
+                <s ref@
+
+                // Extract the recv_internal from the dict
+                dup 0 swap @procdictkeylen idict@ { "internal shortcut error" abort } ifnot
+                swap
+
+                // Delete the recv_internal from the dict
+                0 swap @procdictkeylen idict- drop
+                // Delete the recv_external from the dict (it's okay if it's not there)
+                -1 swap @procdictkeylen idict- drop
+                // Delete the __tact_selector_hack from the dict
+                65535 swap @procdictkeylen idict- drop
+
+                // Bring the code builder from the bottom of the stack
+                // because if recv_external extraction is optional, and the number of elements on the stack is not fixed
+                depth 1- roll
+                // Swap with the dict from which we extracted recv_internal and (maybe) recv_external
+                swap
+
+                // Check if the dict is empty
+                dup null?
+                // Store a copy of this flag in the bottom of the stack
+                dup depth 1- -roll
+                {
+                    // If the dict is empty, just drop it (it will be null if it's empty)
+                    drop
+                }
+                {
+                    // If the dict is not empty, prepare continuation to be stored in c3
+                    <{
+                        // Save this dict as first ref in this continuation, it will be pushed in runtime by DICTPUSHCONST
+                        swap @procdictkeylen DICTPUSHCONST
+                        // Jump to the needed function by it's index
+                        DICTIGETJMPZ
+                        // If such key is not found, throw 11 along with the key as an argument
+                        11 THROWARG
+                    }> PUSHCONT
+                    // Store the continuation in c3
+                    c3 POP
+                } cond
+
+                // Function id is on top of the (runtime) stack
+                DUP IFNOTJMP:<{
+                    // place recv_internal here
+                    DROP swap @addop
+                }>
+
+                // Bring back the flag, indicating if the dict is empty or not from the bottom of the stack
+                depth 1- roll
+                {
+                    // If the dict is empty, throw 11
+                    11 THROWARG
+                }
+                {
+                    // If the dict is not empty, jump to continuation from c3
+                    c3 PUSH JMPX
+                } cond
+            }> b>
+        } : }END>c
+        current@ context! current!
+    } does @atend !
+""";
+
+() __tact_selector_hack() method_id(65535) {
+    return __tact_selector_hack_asm();
+}

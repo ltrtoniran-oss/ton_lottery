@@ -1,0 +1,12 @@
+{
+  "projects": [
+    {
+      "name": "lottery",
+      "path": "./src/lottery.tact",
+      "output": "./build/lottery",
+      "options": {
+        "debug": true
+      }
+    }
+  ]
+}
