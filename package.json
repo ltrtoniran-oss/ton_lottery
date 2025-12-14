@@ -1,0 +1,26 @@
+{
+  "name": "ton-lottery-contracts",
+  "version": "0.0.1",
+  "license": "MIT",
+  "scripts": {
+    "build": "npx tact --config tact.config.json",
+    "test": "jest",
+    "deploy": "tsx scripts/deploy.ts",
+    "draw": "tsx scripts/draw.ts"
+  },
+  "dependencies": {
+    "@orbs-network/ton-access": "^2.3.3",
+    "@ton/core": "^0.56.3",
+    "@ton/crypto": "^3.2.0",
+    "@ton/ton": "^13.11.1",
+    "dotenv": "^16.4.5",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.24",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2"
+  }
+}
