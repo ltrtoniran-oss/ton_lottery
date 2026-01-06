@@ -3,24 +3,29 @@ import { mnemonicToWalletKey } from '@ton/crypto';
 import { TonClient, WalletContractV4, toNano } from '@ton/ton';
 import { Lottery } from '../build/lottery/lottery_Lottery';
 import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 async function main() {
     const mnemonic = process.env.TON_MNEMONIC;
     if (!mnemonic) {
-        console.error('Error: TON_MNEMONIC not found in .env');
+        console.error('Error: TON_MNMNEMONIC not found in .env');
         process.exit(1);
     }
 
+    // Network config
+    const network = process.env.NETWORK === 'mainnet' ? 'mainnet' : 'testnet';
+    console.log(`Deploying to ${network.toUpperCase()}...`);
+
     const key = await mnemonicToWalletKey(mnemonic.split(' '));
     const wallet = WalletContractV4.create({ publicKey: key.publicKey, workchain: 0 });
-    const endpoint = await getHttpEndpoint({ network: 'testnet' });
+    const endpoint = await getHttpEndpoint({ network });
     const client = new TonClient({ endpoint });
 
     if (!await client.isContractDeployed(wallet.address)) {
-        console.log("Wallet not deployed or unfunded:", wallet.address.toString());
-        console.log("Please fund it via Testnet Faucet.");
+        console.log("Wallet not deployed or unfunded:", wallet.address.toString({ testOnly: network === 'testnet' }));
+        console.log(`Please fund it via ${network === 'testnet' ? 'Testnet Faucet' : 'Exchange or Bridge'}.`);
         // proceed anyway? No, need seqno
     }
 
@@ -29,15 +34,11 @@ async function main() {
 
     // Deploy
     const lottery = await Lottery.fromInit(wallet.address);
-    console.log("Lottery Address:", lottery.address.toString());
-
-    // contract wrapper
     const contract = client.open(lottery);
 
-    console.log("Deploying contract to address:", lottery.address.toString());
+    console.log("Deploying contract to ID:", lottery.address.toString());
 
-    // NOTE: Lottery contract does NOT have getSeqno, so we skip that check for the lottery itself.
-    // We only check wallet seqno to confirm transaction sending.
+    // const seqno = await contract.getSeqno(); // Lottery doesn't have seqno
     const walletContract = client.open(wallet);
     const walletSeqno = await walletContract.getSeqno();
 

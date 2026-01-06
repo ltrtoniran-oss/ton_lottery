@@ -1,9 +1,9 @@
 # Tact compilation report
 Contract: Lottery
-BoC Size: 2003 bytes
+BoC Size: 1237 bytes
 
 ## Structures (Structs and Messages)
-Total structures: 17
+Total structures: 18
 
 ### DataSize
 TL-B: `_ cells:int257 bits:int257 refs:int257 = DataSize`
@@ -57,6 +57,14 @@ Signature: `DeployOk{queryId:uint64}`
 TL-B: `factory_deploy#6d0ff13b queryId:uint64 cashback:address = FactoryDeploy`
 Signature: `FactoryDeploy{queryId:uint64,cashback:address}`
 
+### ChangeOwner
+TL-B: `change_owner#819dbe99 queryId:uint64 newOwner:address = ChangeOwner`
+Signature: `ChangeOwner{queryId:uint64,newOwner:address}`
+
+### ChangeOwnerOk
+TL-B: `change_owner_ok#327b2b4a queryId:uint64 newOwner:address = ChangeOwnerOk`
+Signature: `ChangeOwnerOk{queryId:uint64,newOwner:address}`
+
 ### BuyTicket
 TL-B: `buy_ticket#b4b86e5a  = BuyTicket`
 Signature: `BuyTicket{}`
@@ -66,15 +74,11 @@ TL-B: `draw#0187e24d queryId:uint64 = Draw`
 Signature: `Draw{queryId:uint64}`
 
 ### Lottery$Data
-TL-B: `_ owner:address ticketPrice:coins startTime:uint32 endTime:uint32 interval:uint32 consumers:dict<int, address> ticketCounts:dict<address, int> counter:uint32 lastWinner1:address lastWinner2:address lastWinner3:address = Lottery`
-Signature: `Lottery{owner:address,ticketPrice:coins,startTime:uint32,endTime:uint32,interval:uint32,consumers:dict<int, address>,ticketCounts:dict<address, int>,counter:uint32,lastWinner1:address,lastWinner2:address,lastWinner3:address}`
-
-### LastWinners
-TL-B: `_ winner1:address winner2:address winner3:address = LastWinners`
-Signature: `LastWinners{winner1:address,winner2:address,winner3:address}`
+TL-B: `_ owner:address ticketPrice:coins endTime:uint32 interval:uint32 players:dict<int, address> playerCount:uint32 userTicketCounts:dict<address, uint32> recentWinners:dict<uint32, address> winnerCount:uint32 = Lottery`
+Signature: `Lottery{owner:address,ticketPrice:coins,endTime:uint32,interval:uint32,players:dict<int, address>,playerCount:uint32,userTicketCounts:dict<address, uint32>,recentWinners:dict<uint32, address>,winnerCount:uint32}`
 
 ## Get methods
-Total get methods: 4
+Total get methods: 5
 
 ## balance
 No arguments
@@ -86,6 +90,9 @@ No arguments
 Argument: user
 
 ## lastWinners
+No arguments
+
+## owner
 No arguments
 
 ## Exit codes
@@ -125,9 +132,10 @@ No arguments
 * 135: Code of a contract was not found
 * 136: Invalid standard address
 * 138: Not a basechain address
-* 15304: Not enough TON
 * 19287: Lottery closed
-* 36845: Not yet
+* 35937: No players
+* 51754: Insufficient funds
+* 54571: Lottery not finished
 
 ## Trait inheritance diagram
 
@@ -137,6 +145,8 @@ Lottery
 Lottery --> BaseTrait
 Lottery --> Deployable
 Deployable --> BaseTrait
+Lottery --> Ownable
+Ownable --> BaseTrait
 ```
 
 ## Contract dependency diagram

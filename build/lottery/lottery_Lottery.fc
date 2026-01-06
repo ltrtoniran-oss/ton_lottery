@@ -8,9 +8,6 @@
 ;; NOTE: declarations are sorted for optimal order
 ;;
 
-;; __tact_store_address_opt
-builder __tact_store_address_opt(builder b, slice address) inline;
-
 ;; __tact_not_null
 forall X -> X __tact_not_null(X x) impure inline;
 
@@ -23,11 +20,14 @@ slice __tact_context_get_sender() inline;
 ;; __tact_prepare_random
 () __tact_prepare_random() impure inline;
 
-;; __tact_dict_get_slice_int
-int __tact_dict_get_slice_int(cell d, int kl, slice k, int vl) inline;
+;; __tact_dict_get_slice_uint
+int __tact_dict_get_slice_uint(cell d, int kl, slice k, int vl) inline;
 
-;; __tact_dict_set_slice_int
-(cell, ()) __tact_dict_set_slice_int(cell d, int kl, slice k, int v, int vl) inline;
+;; __tact_dict_set_slice_uint
+(cell, ()) __tact_dict_set_slice_uint(cell d, int kl, slice k, int v, int vl) inline;
+
+;; __tact_dict_set_uint_slice
+(cell, ()) __tact_dict_set_uint_slice(cell d, int kl, int k, slice v) inline;
 
 ;; __tact_dict_get_int_slice
 slice __tact_dict_get_int_slice(cell d, int kl, int k) inline;
@@ -42,64 +42,55 @@ builder $DeployOk$_store(builder build_0, (int) v) inline;
 cell $DeployOk$_store_cell((int) v, builder b) inline;
 
 ;; $Lottery$_store
-builder $Lottery$_store(builder build_0, (slice, int, int, int, int, cell, cell, int, slice, slice, slice) v) inline;
+builder $Lottery$_store(builder build_0, (slice, int, int, int, cell, int, cell, cell, int) v) inline;
 
 ;; $Lottery$_load
-(slice, ((slice, int, int, int, int, cell, cell, int, slice, slice, slice))) $Lottery$_load(slice sc_0) inline;
+(slice, ((slice, int, int, int, cell, int, cell, cell, int))) $Lottery$_load(slice sc_0) inline;
 
 ;; $Context$_get_value
 _ $Context$_get_value((int, slice, int, slice) v) inline;
-
-;; $LastWinners$_to_external
-(slice, slice, slice) $LastWinners$_to_external(((slice, slice, slice)) v) inline;
 
 ;; $Lottery$init$_load
 (slice, ((slice))) $Lottery$init$_load(slice sc_0) inline;
 
 ;; $Lottery$_contract_init
-(slice, int, int, int, int, cell, cell, int, slice, slice, slice) $Lottery$_contract_init(slice $owner) impure inline;
+(slice, int, int, int, cell, int, cell, cell, int) $Lottery$_contract_init(slice $owner) impure inline;
 
 ;; $Lottery$_contract_load
-(slice, int, int, int, int, cell, cell, int, slice, slice, slice) $Lottery$_contract_load() impure inline;
+(slice, int, int, int, cell, int, cell, cell, int) $Lottery$_contract_load() impure inline;
 
 ;; $Lottery$_contract_store
-() $Lottery$_contract_store((slice, int, int, int, int, cell, cell, int, slice, slice, slice) v) impure inline;
+() $Lottery$_contract_store((slice, int, int, int, cell, int, cell, cell, int) v) impure inline;
 
-;; $global_random
-int $global_random(int $min, int $max) impure inline;
-
-;; $SendParameters$_constructor_to_value_mode_body
-((int, cell, cell, cell, int, slice, int)) $SendParameters$_constructor_to_value_mode_body(slice $to, int $value, int $mode, cell $body) inline;
-
-;; $Lottery$_fun_reset
-((slice, int, int, int, int, cell, cell, int, slice, slice, slice), ()) $Lottery$_fun_reset((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref;
-
-;; $Lottery$_fun_executeDraw
-((slice, int, int, int, int, cell, cell, int, slice, slice, slice), ()) $Lottery$_fun_executeDraw((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref;
+;; $global_randomInt
+int $global_randomInt() impure inline;
 
 ;; $Lottery$_fun_balance
-((slice, int, int, int, int, cell, cell, int, slice, slice, slice), int) $Lottery$_fun_balance((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref;
+((slice, int, int, int, cell, int, cell, cell, int), int) $Lottery$_fun_balance((slice, int, int, int, cell, int, cell, cell, int) $self) impure inline_ref;
 
 ;; $Lottery$_fun_params
-((slice, int, int, int, int, cell, cell, int, slice, slice, slice), int) $Lottery$_fun_params((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref;
+((slice, int, int, int, cell, int, cell, cell, int), int) $Lottery$_fun_params((slice, int, int, int, cell, int, cell, cell, int) $self) impure inline_ref;
 
 ;; $Lottery$_fun_userTickets
-((slice, int, int, int, int, cell, cell, int, slice, slice, slice), int) $Lottery$_fun_userTickets((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self, slice $user) impure inline_ref;
-
-;; $LastWinners$_constructor_winner1_winner2_winner3
-((slice, slice, slice)) $LastWinners$_constructor_winner1_winner2_winner3(slice $winner1, slice $winner2, slice $winner3) inline;
+((slice, int, int, int, cell, int, cell, cell, int), int) $Lottery$_fun_userTickets((slice, int, int, int, cell, int, cell, cell, int) $self, slice $user) impure inline_ref;
 
 ;; $Lottery$_fun_lastWinners
-((slice, int, int, int, int, cell, cell, int, slice, slice, slice), (slice, slice, slice)) $Lottery$_fun_lastWinners((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref;
+((slice, int, int, int, cell, int, cell, cell, int), cell) $Lottery$_fun_lastWinners((slice, int, int, int, cell, int, cell, cell, int) $self) impure inline_ref;
 
 ;; $MessageParameters$_constructor_bounce_to_value_mode_body
 ((int, cell, int, slice, int)) $MessageParameters$_constructor_bounce_to_value_mode_body(int $bounce, slice $to, int $value, int $mode, cell $body) inline;
 
 ;; $Lottery$_fun_notify
-((slice, int, int, int, int, cell, cell, int, slice, slice, slice), ()) $Lottery$_fun_notify((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self, cell $body) impure inline;
+((slice, int, int, int, cell, int, cell, cell, int), ()) $Lottery$_fun_notify((slice, int, int, int, cell, int, cell, cell, int) $self, cell $body) impure inline;
+
+;; $Lottery$_fun_owner
+((slice, int, int, int, cell, int, cell, cell, int), slice) $Lottery$_fun_owner((slice, int, int, int, cell, int, cell, cell, int) $self) impure inline_ref;
 
 ;; $DeployOk$_constructor_queryId
 ((int)) $DeployOk$_constructor_queryId(int $queryId) inline;
+
+;; $SendParameters$_constructor_to_value_mode_bounce
+((int, cell, cell, cell, int, slice, int)) $SendParameters$_constructor_to_value_mode_bounce(slice $to, int $value, int $mode, int $bounce) inline;
 
 
 ;; lottery_Lottery.stdlib.fc
@@ -107,28 +98,6 @@ global (int, slice, int, slice) __tact_context;
 global slice __tact_context_sender;
 global cell __tact_child_contract_codes;
 global int __tact_randomized;
-
-(slice, slice) __tact_load_address_opt(slice cs) asm """
-
-            b{00} SDBEGINSQ
-            IF:<{
-              PUSHNULL
-            }>ELSE<{
-              LDMSGADDR
-              SWAP
-            }>
-
-""";
-
-builder __tact_store_addr_none(builder b) asm "b{00} STSLICECONST";
-
-builder __tact_store_address_opt(builder b, slice address) inline {
-    if (null?(address)) {
-        return __tact_store_addr_none(b);
-    } else {
-        return b.store_slice(address);
-    }
-}
 
 forall X -> X __tact_not_null(X x) impure inline {
     throw_if(128, null?(x)); return x;
@@ -157,21 +126,30 @@ slice __tact_context_get_sender() inline {
     }
 }
 
-int __tact_dict_get_slice_int(cell d, int kl, slice k, int vl) inline {
+int __tact_dict_get_slice_uint(cell d, int kl, slice k, int vl) inline {
     var (r, ok) = __tact_dict_get(d, kl, k);
     if (ok) {
-        return r~load_int(vl);
+        return r~load_uint(vl);
     } else {
         return null();
     }
 }
 
-(cell, ()) __tact_dict_set_slice_int(cell d, int kl, slice k, int v, int vl) inline {
+(cell, ()) __tact_dict_set_slice_uint(cell d, int kl, slice k, int v, int vl) inline {
     if (null?(v)) {
         var (r, ok) = __tact_dict_delete(d, kl, k);
         return (r, ());
     } else {
-        return (dict_set_builder(d, kl, k, begin_cell().store_int(v, vl)), ());
+        return (dict_set_builder(d, kl, k, begin_cell().store_uint(v, vl)), ());
+    }
+}
+
+(cell, ()) __tact_dict_set_uint_slice(cell d, int kl, int k, slice v) inline {
+    if (null?(v)) {
+        var (r, ok) = udict_delete?(d, kl, k);
+        return (r, ());
+    } else {
+        return (udict_set(d, kl, k, v), ());
     }
 }
 
@@ -197,13 +175,13 @@ int $global_now() impure asm """
     NOW
 """;
 
-int $global_nativeRandomInterval(int $max) impure asm """
-    RAND
+int $global_nativeRandom() impure asm """
+    RANDU256
 """;
 
-int $global_random(int $min, int $max) impure inline {
+int $global_randomInt() impure inline {
     __tact_prepare_random();
-    return ($min + $global_nativeRandomInterval(($max - $min)));
+    return $global_nativeRandom();
 }
 
 int $global_myBalance() impure asm """
@@ -309,8 +287,8 @@ int $global_myBalance() impure asm """
     SENDRAWMSG // https://github.com/tact-lang/tact/issues/1558
 """;
 
-((slice, int, int, int, int, cell, cell, int, slice, slice, slice), ()) $Lottery$_fun_notify((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self, cell $body) impure inline {
-    var (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)) = $self;
+((slice, int, int, int, cell, int, cell, cell, int), ()) $Lottery$_fun_notify((slice, int, int, int, cell, int, cell, cell, int) $self, cell $body) impure inline {
+    var (($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount)) = $self;
     slice $to = __tact_context_get_sender();
     int $bounce = false;
     if (false) {
@@ -319,33 +297,18 @@ int $global_myBalance() impure asm """
         if (($balanceBeforeMessage < 0)) {
             $global_nativeReserve(0, 0);
             $global_message($MessageParameters$_constructor_bounce_to_value_mode_body($bounce, $to, 0, 130, $body));
-            return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), ());
+            return (($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount), ());
         }
     }
     $global_message($MessageParameters$_constructor_bounce_to_value_mode_body($bounce, $to, 0, 66, $body));
-    return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), ());
+    return (($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount), ());
 }
 
-;; lottery_Lottery.constants.fc
-;; Cell Fbc1zJF0iDy/+qYd6EKZTDLIJ7XfwpB+UK6KUF6xF0Q=
-cell __gen_cell_cell_15b735cc9174883cbffaa61de842994c32c827b5dfc2907e50ae8a505eb11744() asm """
-    B{b5ee9c7241010101001900002e00000000466972737420506c6163652057696e6e657221f726ff20} B>boc PUSHREF
-""";
-
-;; Cell yS+UDQRqAS3J+emjiETlmc4K32/9ww7cO44Eg+h+daI=
-cell __gen_cell_cell_c92f940d046a012dc9f9e9a38844e599ce0adf6ffdc30edc3b8e0483e87e75a2() asm """
-    B{b5ee9c7241010101001a000030000000005365636f6e6420506c6163652057696e6e657221f0cf4084} B>boc PUSHREF
-""";
-
-;; Cell 9lZKHAeYUMyD2gh6ptqGwaEtTcvfL6prrJSRJCPRHwI=
-cell __gen_cell_cell_f6564a1c079850cc83da087aa6da86c1a12d4dcbdf2faa6bac94912423d11f02() asm """
-    B{b5ee9c7241010101001900002e00000000546869726420506c6163652057696e6e657221fec1a684} B>boc PUSHREF
-""";
-
-;; Cell qqvJZYVdv16qN7ahKvCCKuhVyXcur4UbZ1eDl4PasLc=
-cell __gen_cell_cell_aaabc965855dbf5eaa37b6a12af0822ae855c9772eaf851b6757839783dab0b7() asm """
-    B{b5ee9c7241010101001000001c00000000466565205061796f75741045c99e} B>boc PUSHREF
-""";
+((slice, int, int, int, cell, int, cell, cell, int), slice) $Lottery$_fun_owner((slice, int, int, int, cell, int, cell, cell, int) $self) impure inline_ref {
+    var (($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount)) = $self;
+    var $fresh$ret_5 = $self'owner;
+    return (($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount), $fresh$ret_5);
+}
 
 ;; lottery_Lottery.storage.fc
 ;;
@@ -363,8 +326,8 @@ _ $Context$_get_value((int, slice, int, slice) v) inline {
 ;; TLB: _ mode:int257 body:Maybe ^cell code:Maybe ^cell data:Maybe ^cell value:int257 to:address bounce:bool = SendParameters
 ;;
 
-((int, cell, cell, cell, int, slice, int)) $SendParameters$_constructor_to_value_mode_body(slice $to, int $value, int $mode, cell $body) inline {
-    return ($mode, $body, null(), null(), $value, $to, true);
+((int, cell, cell, cell, int, slice, int)) $SendParameters$_constructor_to_value_mode_bounce(slice $to, int $value, int $mode, int $bounce) inline {
+    return ($mode, null(), null(), null(), $value, $to, $bounce);
 }
 
 ;;
@@ -398,56 +361,38 @@ cell $DeployOk$_store_cell((int) v, builder b) inline {
 }
 
 ;;
-;; Type: LastWinners
-;; TLB: _ winner1:address winner2:address winner3:address = LastWinners
-;;
-
-(slice, slice, slice) $LastWinners$_to_external(((slice, slice, slice)) v) inline {
-    var (v'winner1, v'winner2, v'winner3) = v; 
-    return (v'winner1, v'winner2, v'winner3);
-}
-
-((slice, slice, slice)) $LastWinners$_constructor_winner1_winner2_winner3(slice $winner1, slice $winner2, slice $winner3) inline {
-    return ($winner1, $winner2, $winner3);
-}
-
-;;
 ;; Type: Lottery
-;; TLB: _ owner:address ticketPrice:coins startTime:uint32 endTime:uint32 interval:uint32 consumers:dict<int, address> ticketCounts:dict<address, int> counter:uint32 lastWinner1:address lastWinner2:address lastWinner3:address = Lottery
+;; TLB: _ owner:address ticketPrice:coins endTime:uint32 interval:uint32 players:dict<int, address> playerCount:uint32 userTicketCounts:dict<address, uint32> recentWinners:dict<uint32, address> winnerCount:uint32 = Lottery
 ;;
 
-builder $Lottery$_store(builder build_0, (slice, int, int, int, int, cell, cell, int, slice, slice, slice) v) inline {
-    var (v'owner, v'ticketPrice, v'startTime, v'endTime, v'interval, v'consumers, v'ticketCounts, v'counter, v'lastWinner1, v'lastWinner2, v'lastWinner3) = v;
+builder $Lottery$_store(builder build_0, (slice, int, int, int, cell, int, cell, cell, int) v) inline {
+    var (v'owner, v'ticketPrice, v'endTime, v'interval, v'players, v'playerCount, v'userTicketCounts, v'recentWinners, v'winnerCount) = v;
     build_0 = build_0.store_slice(v'owner);
     build_0 = build_0.store_varuint16(v'ticketPrice);
-    build_0 = build_0.store_uint(v'startTime, 32);
     build_0 = build_0.store_uint(v'endTime, 32);
     build_0 = build_0.store_uint(v'interval, 32);
-    build_0 = build_0.store_dict(v'consumers);
+    build_0 = build_0.store_dict(v'players);
+    build_0 = build_0.store_uint(v'playerCount, 32);
     var build_1 = begin_cell();
-    build_1 = build_1.store_dict(v'ticketCounts);
-    build_1 = build_1.store_uint(v'counter, 32);
-    build_1 = __tact_store_address_opt(build_1, v'lastWinner1);
-    build_1 = __tact_store_address_opt(build_1, v'lastWinner2);
-    build_1 = __tact_store_address_opt(build_1, v'lastWinner3);
+    build_1 = build_1.store_dict(v'userTicketCounts);
+    build_1 = build_1.store_dict(v'recentWinners);
+    build_1 = build_1.store_uint(v'winnerCount, 32);
     build_0 = store_builder_ref(build_0, build_1);
     return build_0;
 }
 
-(slice, ((slice, int, int, int, int, cell, cell, int, slice, slice, slice))) $Lottery$_load(slice sc_0) inline {
+(slice, ((slice, int, int, int, cell, int, cell, cell, int))) $Lottery$_load(slice sc_0) inline {
     var v'owner = sc_0~load_msg_addr();
     var v'ticketPrice = sc_0~load_varuint16();
-    var v'startTime = sc_0~load_uint(32);
     var v'endTime = sc_0~load_uint(32);
     var v'interval = sc_0~load_uint(32);
-    var v'consumers = sc_0~load_dict();
+    var v'players = sc_0~load_dict();
+    var v'playerCount = sc_0~load_uint(32);
     slice sc_1 = sc_0~load_ref().begin_parse();
-    var v'ticketCounts = sc_1~load_dict();
-    var v'counter = sc_1~load_uint(32);
-    var v'lastWinner1 = sc_1~__tact_load_address_opt();
-    var v'lastWinner2 = sc_1~__tact_load_address_opt();
-    var v'lastWinner3 = sc_1~__tact_load_address_opt();
-    return (sc_0, (v'owner, v'ticketPrice, v'startTime, v'endTime, v'interval, v'consumers, v'ticketCounts, v'counter, v'lastWinner1, v'lastWinner2, v'lastWinner3));
+    var v'userTicketCounts = sc_1~load_dict();
+    var v'recentWinners = sc_1~load_dict();
+    var v'winnerCount = sc_1~load_uint(32);
+    return (sc_0, (v'owner, v'ticketPrice, v'endTime, v'interval, v'players, v'playerCount, v'userTicketCounts, v'recentWinners, v'winnerCount));
 }
 
 (slice, ((slice))) $Lottery$init$_load(slice sc_0) inline {
@@ -455,7 +400,7 @@ builder $Lottery$_store(builder build_0, (slice, int, int, int, int, cell, cell,
     return (sc_0, (v'owner));
 }
 
-(slice, int, int, int, int, cell, cell, int, slice, slice, slice) $Lottery$_contract_load() impure inline {
+(slice, int, int, int, cell, int, cell, cell, int) $Lottery$_contract_load() impure inline {
     slice $sc = get_data().begin_parse();
     int $loaded = $sc~load_int(1);
     if ($loaded) {
@@ -468,7 +413,7 @@ builder $Lottery$_store(builder build_0, (slice, int, int, int, int, cell, cell,
     }
 }
 
-() $Lottery$_contract_store((slice, int, int, int, int, cell, cell, int, slice, slice, slice) v) impure inline {
+() $Lottery$_contract_store((slice, int, int, int, cell, int, cell, cell, int) v) impure inline {
     builder b = begin_cell();
     b = b.store_int(true, 1);
     b = $Lottery$_store(b, v);
@@ -479,100 +424,44 @@ builder $Lottery$_store(builder build_0, (slice, int, int, int, int, cell, cell,
 ;; Contract Lottery functions
 ;;
 
-(slice, int, int, int, int, cell, cell, int, slice, slice, slice) $Lottery$_contract_init(slice $owner) impure inline {
-    var (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)) = (null(), null(), null(), null(), null(), null(), null(), null(), null(), null(), null());
+(slice, int, int, int, cell, int, cell, cell, int) $Lottery$_contract_init(slice $owner) impure inline {
+    var (($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount)) = (null(), null(), null(), null(), null(), null(), null(), null(), null());
     $self'owner = $owner;
     $self'ticketPrice = 1000000000;
-    $self'startTime = $global_now();
     $self'interval = 604800;
-    $self'endTime = ($self'startTime + $self'interval);
-    $self'counter = 0;
-    return ($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3);
+    $self'endTime = ($global_now() + $self'interval);
+    $self'playerCount = 0;
+    $self'winnerCount = 0;
+    return ($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount);
 }
 
-((slice, int, int, int, int, cell, cell, int, slice, slice, slice), ()) $Lottery$_fun_reset((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref {
-    var (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)) = $self;
-    $self'startTime = $global_now();
-    $self'endTime = ($self'startTime + $self'interval);
-    $self'counter = 0;
-    $self'consumers = null();
-    $self'ticketCounts = null();
-    int $balance = ($global_myBalance() - 50000000);
-    if (($balance > 10000000000)) {
-        $global_send($SendParameters$_constructor_to_value_mode_body($self'owner, $balance, 2, __gen_cell_cell_aaabc965855dbf5eaa37b6a12af0822ae855c9772eaf851b6757839783dab0b7()));
-    }
-    return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), ());
-}
-
-((slice, int, int, int, int, cell, cell, int, slice, slice, slice), ()) $Lottery$_fun_executeDraw((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref {
-    var (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)) = $self;
-    ifnot ($self'counter) {
-        ($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)~$Lottery$_fun_reset();
-        return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), ());
-    }
-    int $seed1 = $global_random(0, $self'counter);
-    slice $winner1 = __tact_not_null(__tact_dict_get_int_slice($self'consumers, 257, $seed1));
-    $self'lastWinner1 = $winner1;
-    int $seed2 = $global_random(0, $self'counter);
-    slice $winner2 = __tact_not_null(__tact_dict_get_int_slice($self'consumers, 257, $seed2));
-    int $attempts = 0;
-    while (( (( (( equal_slices_bits($winner2, $winner1) )) ? (($attempts < 5)) : (false) )) ? (($self'counter > 1)) : (false) )) {
-        $seed2 = $global_random(0, $self'counter);
-        $winner2 = __tact_not_null(__tact_dict_get_int_slice($self'consumers, 257, $seed2));
-        $attempts = ($attempts + 1);
-    }
-    $self'lastWinner2 = $winner2;
-    int $seed3 = $global_random(0, $self'counter);
-    slice $winner3 = __tact_not_null(__tact_dict_get_int_slice($self'consumers, 257, $seed3));
-    $attempts = 0;
-    while (( (( (( (( equal_slices_bits($winner3, $winner1) )) ? (true) : (( equal_slices_bits($winner3, $winner2) )) )) ? (($attempts < 5)) : (false) )) ? (($self'counter > 2)) : (false) )) {
-        $seed3 = $global_random(0, $self'counter);
-        $winner3 = __tact_not_null(__tact_dict_get_int_slice($self'consumers, 257, $seed3));
-        $attempts = ($attempts + 1);
-    }
-    $self'lastWinner3 = $winner3;
-    int $balance = $global_myBalance();
-    int $storageReserve = 50000000;
-    int $pot = ($balance - $storageReserve);
-    if (($pot > 0)) {
-        int $prize1 = (($pot * 50) / 100);
-        int $prize2 = (($pot * 25) / 100);
-        int $prize3 = (($pot * 15) / 100);
-        $global_send($SendParameters$_constructor_to_value_mode_body($winner1, $prize1, 2, __gen_cell_cell_15b735cc9174883cbffaa61de842994c32c827b5dfc2907e50ae8a505eb11744()));
-        $global_send($SendParameters$_constructor_to_value_mode_body($winner2, $prize2, 2, __gen_cell_cell_c92f940d046a012dc9f9e9a38844e599ce0adf6ffdc30edc3b8e0483e87e75a2()));
-        $global_send($SendParameters$_constructor_to_value_mode_body($winner3, $prize3, 2, __gen_cell_cell_f6564a1c079850cc83da087aa6da86c1a12d4dcbdf2faa6bac94912423d11f02()));
-    }
-    ($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)~$Lottery$_fun_reset();
-    return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), ());
-}
-
-((slice, int, int, int, int, cell, cell, int, slice, slice, slice), int) $Lottery$_fun_balance((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref {
-    var (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)) = $self;
+((slice, int, int, int, cell, int, cell, cell, int), int) $Lottery$_fun_balance((slice, int, int, int, cell, int, cell, cell, int) $self) impure inline_ref {
+    var (($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount)) = $self;
     var $fresh$ret_0 = $global_myBalance();
-    return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), $fresh$ret_0);
+    return (($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount), $fresh$ret_0);
 }
 
-((slice, int, int, int, int, cell, cell, int, slice, slice, slice), int) $Lottery$_fun_params((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref {
-    var (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)) = $self;
+((slice, int, int, int, cell, int, cell, cell, int), int) $Lottery$_fun_params((slice, int, int, int, cell, int, cell, cell, int) $self) impure inline_ref {
+    var (($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount)) = $self;
     var $fresh$ret_1 = $self'endTime;
-    return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), $fresh$ret_1);
+    return (($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount), $fresh$ret_1);
 }
 
-((slice, int, int, int, int, cell, cell, int, slice, slice, slice), int) $Lottery$_fun_userTickets((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self, slice $user) impure inline_ref {
-    var (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)) = $self;
-    int $count = __tact_dict_get_slice_int($self'ticketCounts, 267, $user, 257);
-    if (null?($count)) {
-        var $fresh$ret_2 = 0;
-        return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), $fresh$ret_2);
+((slice, int, int, int, cell, int, cell, cell, int), int) $Lottery$_fun_userTickets((slice, int, int, int, cell, int, cell, cell, int) $self, slice $user) impure inline_ref {
+    var (($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount)) = $self;
+    int $count = __tact_dict_get_slice_uint($self'userTicketCounts, 267, $user, 32);
+    if ((~ null?($count))) {
+        var $fresh$ret_2 = __tact_not_null($count);
+        return (($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount), $fresh$ret_2);
     }
-    var $fresh$ret_3 = __tact_not_null($count);
-    return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), $fresh$ret_3);
+    var $fresh$ret_3 = 0;
+    return (($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount), $fresh$ret_3);
 }
 
-((slice, int, int, int, int, cell, cell, int, slice, slice, slice), (slice, slice, slice)) $Lottery$_fun_lastWinners((slice, int, int, int, int, cell, cell, int, slice, slice, slice) $self) impure inline_ref {
-    var (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)) = $self;
-    var $fresh$ret_4 = $LastWinners$_constructor_winner1_winner2_winner3($self'lastWinner1, $self'lastWinner2, $self'lastWinner3);
-    return (($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3), $fresh$ret_4);
+((slice, int, int, int, cell, int, cell, cell, int), cell) $Lottery$_fun_lastWinners((slice, int, int, int, cell, int, cell, cell, int) $self) impure inline_ref {
+    var (($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount)) = $self;
+    var $fresh$ret_4 = $self'recentWinners;
+    return (($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount), $fresh$ret_4);
 }
 
 ;;
@@ -601,7 +490,13 @@ _ %userTickets(slice $user) method_id(104971) {
 _ %lastWinners() method_id(104779) {
     var self = $Lottery$_contract_load();
     var res = self~$Lottery$_fun_lastWinners();
-    return $LastWinners$_to_external(res);
+    return res;
+}
+
+_ %owner() method_id(83229) {
+    var self = $Lottery$_contract_load();
+    var res = self~$Lottery$_fun_owner();
+    return res;
 }
 
 ;;
@@ -624,7 +519,7 @@ _ %lastWinners() method_id(104779) {
     __tact_context_sender = msg_sender_addr;
     
     ;; Load contract data
-    var ($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3) = $Lottery$_contract_load();
+    var ($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount) = $Lottery$_contract_load();
     
     ;; Handle bounced messages
     if (msg_bounced) { return (); }
@@ -635,8 +530,8 @@ _ %lastWinners() method_id(104779) {
         ;; Receive Deploy message
         if (op == 0x946a98b6) {
             var $deploy'queryId = in_msg~load_uint(64);
-            ($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)~$Lottery$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId), begin_cell()));
-            $Lottery$_contract_store(($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3));
+            ($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount)~$Lottery$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId), begin_cell()));
+            $Lottery$_contract_store(($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount));
             return ();
         }
         
@@ -646,24 +541,34 @@ _ %lastWinners() method_id(104779) {
     ;; Receive "buy" message
     if (text_op == 0x91a3be4c93a85bd2e6be4eb82f98c33c12384ddd3ea141580587f8d8e38b1e0d) {
         var ($ctx'bounceable, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
-        throw_unless(15304, ($ctx'value >= $self'ticketPrice));
+        throw_unless(51754, ($ctx'value >= $self'ticketPrice));
         throw_unless(19287, ($global_now() < $self'endTime));
-        $self'consumers~__tact_dict_set_int_slice(257, $self'counter, $ctx'sender);
-        $self'counter = ($self'counter + 1);
+        $self'players~__tact_dict_set_int_slice(257, $self'playerCount, $ctx'sender);
+        $self'playerCount = ($self'playerCount + 1);
         int $currentCount = 0;
-        int $savedCount = __tact_dict_get_slice_int($self'ticketCounts, 267, $ctx'sender, 257);
-        if ((~ null?($savedCount))) {
-            $currentCount = __tact_not_null($savedCount);
+        int $countOpt = __tact_dict_get_slice_uint($self'userTicketCounts, 267, $ctx'sender, 32);
+        if ((~ null?($countOpt))) {
+            $currentCount = __tact_not_null($countOpt);
         }
-        $self'ticketCounts~__tact_dict_set_slice_int(267, $ctx'sender, ($currentCount + 1), 257);
-        $Lottery$_contract_store(($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3));
+        $self'userTicketCounts~__tact_dict_set_slice_uint(267, $ctx'sender, ($currentCount + 1), 32);
+        $Lottery$_contract_store(($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount));
         return ();
     }
     ;; Receive "draw" message
     if (text_op == 0xb06e2f6ff1a217a458de5285280d11f15c0e47d065a96713ffb52bce4d197514) {
-        throw_unless(36845, ($global_now() >= $self'endTime));
-        ($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3)~$Lottery$_fun_executeDraw();
-        $Lottery$_contract_store(($self'owner, $self'ticketPrice, $self'startTime, $self'endTime, $self'interval, $self'consumers, $self'ticketCounts, $self'counter, $self'lastWinner1, $self'lastWinner2, $self'lastWinner3));
+        throw_unless(54571, ($global_now() >= $self'endTime));
+        throw_unless(35937, ($self'playerCount > 0));
+        int $random = $global_randomInt();
+        int $winnerIndex = ($random % $self'playerCount);
+        slice $winner = __tact_not_null(__tact_dict_get_int_slice($self'players, 257, $winnerIndex));
+        $global_send($SendParameters$_constructor_to_value_mode_bounce($winner, 0, 128, true));
+        $self'recentWinners~__tact_dict_set_uint_slice(32, ($self'winnerCount % 3), $winner);
+        $self'winnerCount = ($self'winnerCount + 1);
+        $self'players = null();
+        $self'userTicketCounts = null();
+        $self'playerCount = 0;
+        $self'endTime = ($global_now() + $self'interval);
+        $Lottery$_contract_store(($self'owner, $self'ticketPrice, $self'endTime, $self'interval, $self'players, $self'playerCount, $self'userTicketCounts, $self'recentWinners, $self'winnerCount));
         return ();
     }
     ;; Throw if not handled
